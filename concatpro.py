@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # ---------------------------------------------------------------------------
-# data_table_catcon.py
-# Created on: 2018-12-05
-#   Parts of code were generated via tool help in ArcGIS for Destop
-# Usage: data_table_catcon <Input_Excel_File> <Field_Name> <Expression> <Field_Name__2_> 
-# Description: 
+# concatpro.py
+# Created on: 12-05-2018
+#   Parts of code were generated via tool help in ArcGIS Destop
+# Usage: Join excel file to featurclass 
+# Description: The objective of this code is take a featureclass and an excel file and join
+# them to extract necessary updates to the featureclass. These updates are performed weekly.
+# Current update on: 12-10-2018
 # ---------------------------------------------------------------------------
 
 # Import arcpy module
@@ -42,6 +44,11 @@ arcpy.CalculateField_management(v2018_AlaPine_TM_test_shp__3_, "lacost", "[Lando
 # Process: Excel To Table
 arcpy.ExcelToTable_conversion(v2018_Timber_Marking_xlsx, Timber_Marking_2018_dbf, "Sheet1")
 
+# The process of the add field for "la" through "st" was done due to an error I was getting from the table.
+# The steps taken to add these fields were to convert them from Long fields to string or text fields.
+# The purpose for this was because in th .dbf format upon concatenation the field were literally converting the equation as a math problem.
+# This causes an error when trying to join the dbf to the featurclass or .shp
+# The process after each field addition was to calculate the long data into text field for concatination which you see in the lacost field 
 # Process: Add Field (3)
 arcpy.AddField_management(Timber_Marking_2018_dbf, "la", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
 
@@ -61,7 +68,7 @@ arcpy.AddField_management(Timber_Marking_2018_dbf__7_, "st", "TEXT", "", "", "",
 arcpy.CalculateField_management(Timber_Marking_2018_dbf__4_, "st", "[Column2]", "VB", "")
 
 # Process: Add Field
-arcpy.AddField_management(Timber_Marking_2018_dbf__8_, "lacost", "LONG", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
+arcpy.AddField_management(Timber_Marking_2018_dbf__8_, "lacost", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
 
 # Process: Calculate Field
 arcpy.CalculateField_management(Timber_Marking_2018_dbf__9_, "lacost", "[la]+ [co]+ [st]", "VB", "")
